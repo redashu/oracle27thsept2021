@@ -1,1 +1,4 @@
-# oracle27thsept2021
+# training docker & kubernetes plan 
+
+
+<img src="plan.png">
