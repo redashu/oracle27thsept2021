@@ -361,3 +361,57 @@ d44656649e54   alpine:latest    "ls"                   21 minutes ago   Exited (
 
 ```
 
+## application containerization 
+
+<img src="appcont1.png">
+
+## Intro to docker image building tools 
+
+<img src="tools.png">
+
+
+### Understanding dockerfile 
+
+<img src="dfile.png">
+
+### building first docker image
+
+```
+[ashu@ip-172-31-81-194 ashuimages]$ ls
+cppapp  javaapp  pythonapp
+[ashu@ip-172-31-81-194 ashuimages]$ cd pythonapp
+[ashu@ip-172-31-81-194 pythonapp]$ ls
+Dockerfile  oracle.py
+[ashu@ip-172-31-81-194 pythonapp]$ docker  build  -t  ashupython:v1  . 
+Sending build context to Docker daemon  3.584kB
+Step 1/7 : FROM oraclelinux:8.4
+ ---> fcf3cbfc22ac
+Step 2/7 : LABEL name=ashutoshh
+ ---> Running in acce45e6c913
+Removing intermediate container acce45e6c913
+ ---> a13ddd057644
+Step 3/7 : LABEL email=ashutoshh@linux.com
+ ---> Running in 8637824ab757
+Removing intermediate container 8637824ab757
+ ---> c5a18c32933f
+Step 4/7 : RUN  yum  install python3 -y
+ ---> Running in b00345abf59d
+Oracle Linux 8 BaseOS Latest (x86_64)            74 MB/s |  36 MB     00:00    
+Oracle Linux 8 Application Stream (x86_64)       71 MB/s |  27 MB     00:00    
+
+```
+
+### creating container 
+
+```
+[ashu@ip-172-31-81-194 pythonapp]$ docker  run  -it  -d  --name ashuc2   ashupython:v1  
+7c06a33711e271204b5a5ef5eb81601b3a5e709b2733c7ce29e741c717ccfba4
+[ashu@ip-172-31-81-194 pythonapp]$ docker  ps
+CONTAINER ID   IMAGE           COMMAND                  CREATED             STATUS             PORTS     NAMES
+7c06a33711e2   ashupython:v1   "python3 /mycode/ora…"   3 seconds ago       Up 3 seconds                 ashuc2
+
+```
+
+
+
+
