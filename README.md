@@ -362,4 +362,97 @@ Successfully tagged ashuwebapp:v1
 
 <img src="portf.png">
 
+### Custom bridge 
+
+<img src="custom.png">
+
+### creating a bridge with DNS features only but not static IP address
+
+```
+[ashu@ip-172-31-81-194 ashuimages]$ docker  network create  ashubr1 
+39496c514f996000a39bd9ddd605f0c7235b0736291b51e83be48415886568c9
+[ashu@ip-172-31-81-194 ashuimages]$ docker network  ls
+NETWORK ID     NAME      DRIVER    SCOPE
+39496c514f99   ashubr1   bridge    local
+b15bcc48836b   bridge    bridge    local
+ad2a7dd6b772   host      host      local
+15fb1ba11d0c   none      null      local
+[ashu@ip-172-31-81-194 ashuimages]$ docker network  inspect ashubr1
+[
+    {
+        "Name": "ashubr1",
+        "Id": "39496c514f996000a39bd9ddd605f0c7235b0736291b51e83be48415886568c9",
+        "Created": "2021-09-28T11:17:57.960510617Z",
+        "Scope": "local",
+        "Driver": "bridge",
+        "EnableIPv6": false,
+        "IPAM": {
+            "Driver": "default",
+            "Options": {},
+            "Config": [
+                {
+                    "Subnet": "172.18.0.0/16",
+                    "Gateway": "172.18.0.1"
+                }
+            ]
+        },
+        "Internal": false,
+        "Attachable": false,
+        "Ingress": false,
+        "ConfigFrom": {
+            "Network": ""
+        },
+        "ConfigOnly": false,
+        "Containers": {},
+        "Options": {},
+        "Labels": {}
+    }
+]
+
+```
+
+### checking container connection 
+
+```
+[ashu@ip-172-31-81-194 ashuimages]$ docker  run -itd --name ashuxc1 --network  ashubr1 alpine ping localhost 
+38b4c61403d1011643e325e3c6023e24749f3de29daedd9a8e5c5247f94f544c
+[ashu@ip-172-31-81-194 ashuimages]$ 
+[ashu@ip-172-31-81-194 ashuimages]$ 
+[ashu@ip-172-31-81-194 ashuimages]$ docker  run -itd --name ashuxc2 --network  ashubr1 alpine ping localhost 
+650f88101f42f7ecae7c92a2d570701fa01c3cb9a40019306d3699e94df5f8ef
+[ashu@ip-172-31-81-194 ashuimages]$ docker  exec -it ashuxc2  sh 
+/ # 
+/ # ping ashuxc1
+PING ashuxc1 (172.18.0.2): 56 data bytes
+64 bytes from 172.18.0.2: seq=0 ttl=255 time=0.118 ms
+64 bytes from 172.18.0.2: seq=1 ttl=255 time=0.093 ms
+^C
+--- ashuxc1 ping statistics ---
+2 packets transmitted, 2 packets received, 0% packet loss
+round-trip min/avg/max = 0.093/0.105/0.118 ms
+/ # exit
+
+```
+
+### creating bridge with DNS and static subnet 
+
+```
+ 247  docker  network create  ashubr2  --subnet  192.168.10.0/24 
+  248  docker  run -itd --name ashuxc3 --network  ashubr2 alpine ping localhost 
+  249  docker  run -itd --name ashuxc4 --network  ashubr2 --ip  192.168.10.100  alpine ping localhost 
+  250  history 
+[ashu@ip-172-31-81-194 ashuimages]$ docker  exec -it ashuxc3  sh 
+/ # ping ashuxc4
+PING ashuxc4 (192.168.10.100): 56 data bytes
+64 bytes from 192.168.10.100: seq=0 ttl=255 time=0.120 ms
+64 bytes from 192.168.10.100: seq=1 ttl=255 time=0.103 ms
+64 bytes from 192.168.10.100: seq=2 ttl=255 time=0.102 ms
+^C
+--- ashuxc4 ping statistics ---
+3 packets transmitted, 3 packets received, 0% packet loss
+round-trip min/avg/max = 0.102/0.108/0.120 ms
+/ # exit
+
+```
+
 
