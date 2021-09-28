@@ -201,4 +201,165 @@ IMAGE          CREATED       CREATED BY                                      SIZ
   
 ```
 
+## Docker networking 
+
+<img src="dnet.png">
+
+### by default all containers in same bridge can connect 
+
+```
+[ashu@ip-172-31-81-194 ashuimages]$ docker  inspect   ashuc1  --format='{{.NetworkSettings.IPAddress}}'
+172.17.0.2
+[ashu@ip-172-31-81-194 ashuimages]$ docker  inspect   ashuc2  --format='{{.NetworkSettings.IPAddress}}'
+172.17.0.3
+[ashu@ip-172-31-81-194 ashuimages]$ 
+[ashu@ip-172-31-81-194 ashuimages]$ docker  exec -it  ashuc1  sh 
+/ # ifconfig 
+eth0      Link encap:Ethernet  HWaddr 02:42:AC:11:00:02  
+          inet addr:172.17.0.2  Bcast:172.17.255.255  Mask:255.255.0.0
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:13 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0 
+          RX bytes:1030 (1.0 KiB)  TX bytes:0 (0.0 B)
+
+lo        Link encap:Local Loopback  
+          inet addr:127.0.0.1  Mask:255.0.0.0
+          UP LOOPBACK RUNNING  MTU:65536  Metric:1
+          RX packets:676 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:676 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:56784 (55.4 KiB)  TX bytes:56784 (55.4 KiB)
+
+/ # ping  172.17.0.3
+PING 172.17.0.3 (172.17.0.3): 56 data bytes
+64 bytes from 172.17.0.3: seq=0 ttl=255 time=0.105 ms
+64 bytes from 172.17.0.3: seq=1 ttl=255 time=0.085 ms
+^C
+--- 172.17.0.3 ping statistics ---
+2 packets transmitted, 2 packets received, 0% packet loss
+round-trip min/avg/max = 0.085/0.095/0.105 ms
+
+```
+
+### more about docker network bridge
+
+```
+[ashu@ip-172-31-81-194 ashuimages]$ docker  network ls
+NETWORK ID     NAME      DRIVER    SCOPE
+b15bcc48836b   bridge    bridge    local
+ad2a7dd6b772   host      host      local
+15fb1ba11d0c   none      null      local
+[ashu@ip-172-31-81-194 ashuimages]$ docker  network   inspect b15bcc48836b
+[
+    {
+        "Name": "bridge",
+        "Id": "b15bcc48836b83117fdc2d67cccf4ff78c3e1af10ac3e9c8f7f0c5dbfd8a5998",
+        "Created": "2021-09-28T03:56:31.356696114Z",
+        "Scope": "local",
+        "Driver": "bridge",
+        "EnableIPv6": false,
+        "IPAM": {
+            "Driver": "default",
+            "Options": null,
+            "Config": [
+                {
+                    "Subnet": "172.17.0.0/16",
+                    "Gateway": "172.17.0.1"
+                }
+            ]
+        },
+        "Internal": false,
+        "Attachable": false,
+        "Ingress": false,
+        "ConfigFrom": {
+            "Network": ""
+        },
+        "ConfigOnly": false,
+        "Containers": {
+            "448ae0c76c399f7182d2cb9b2a82a599263e563711592cbeddaa7cc6a012250d": {
+                "Name": "ashuc1",
+                "EndpointID": "73253b801bc33a38b4515163112becc792402c1d505fc95bb8005143e061bc6e",
+                "MacAddress": "02:42:ac:11:00:02",
+                "IPv4Address": "172.17.0.2/16",
+                "IPv6Address": ""
+            },
+            "cc5aa09e6825734ba851f0c1a3dfe805de4294333d28c5a4ff0a385d19f6fc70": {
+                "Name": "ashuc2",
+                "EndpointID": "a21b2d2058173d909ea5cd80d3e9d4705e64c09ad38e9c55a7342805dbd60f6f",
+                "MacAddress": "02:42:ac:11:00:03",
+                "IPv4Address": "172.17.0.3/16",
+                "IPv6Address": ""
+            }
+        },
+        "Options": {
+            "com.docker.network.bridge.default_bridge": "true",
+            "com.docker.network.bridge.enable_icc": "true",
+            "com.docker.network.bridge.enable_ip_masquerade": "true",
+            "com.docker.network.bridge.host_binding_ipv4": "0.0.0.0",
+            "com.docker.network.bridge.name": "docker0",
+            "com.docker.network.driver.mtu": "1500"
+        },
+        "Labels": {}
+    }
+]
+
+```
+
+### NAT in Docker 
+
+<img src="nat.png">
+
+## POrtwarding in Docker host 
+
+### building webapp with appserver 
+
+<img src="apps.png">
+
+### Nginx webapp server 
+
+<img src="webapp.png">
+
+### cloning webapp
+
+```
+git clone  https://github.com/schoolofdevops/html-sample-app
+
+```
+
+### building image 
+
+```
+[ashu@ip-172-31-81-194 ashuimages]$ cd  html-sample-app/
+[ashu@ip-172-31-81-194 html-sample-app]$ ls
+assets      elements.html  html5up-phantom.zip  index.html   README.txt
+Dockerfile  generic.html   images               LICENSE.txt
+[ashu@ip-172-31-81-194 html-sample-app]$ docker  build -t  ashuwebapp:v1 . 
+Sending build context to Docker daemon  2.099MB
+Step 1/3 : FROM nginx
+latest: Pulling from library/nginx
+07aded7c29c6: Pull complete 
+bbe0b7acc89c: Pull complete 
+44ac32b0bba8: Pull complete 
+91d6e3e593db: Pull complete 
+8700267f2376: Pull complete 
+4ce73aa6e9b0: Pull complete 
+Digest: sha256:969419c0b7b0a5f40a4d666ad227360de5874930a2b228a7c11e15dedbc6e092
+Status: Downloaded newer image for nginx:latest
+ ---> f8f4ffc8092c
+Step 2/3 : LABEL email=ashutoshh@linux.com
+ ---> Running in 7a66f1020f8f
+Removing intermediate container 7a66f1020f8f
+ ---> 314c3cb166f3
+Step 3/3 : COPY . /usr/share/nginx/html/
+ ---> 2d9f90c01e29
+Successfully built 2d9f90c01e29
+Successfully tagged ashuwebapp:v1
+
+```
+
+### creating container with port forwarding rule 
+
+<img src="portf.png">
+
 
