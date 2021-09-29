@@ -276,5 +276,95 @@ Query OK, 1 row affected (0.00 sec)
 ```
 
 
+### MS SQL as COntainer 
+
+```
+docker run -e 'ACCEPT_EULA=Y' -e "SA_PASSWORD=NewpassDb088#"    -p 1401:1433    -v sql1data:/var/opt/mssql -d mcr.microsoft.com/mssql/server:2019-latest
+
+```
+
+### problem with Docker / any container RUntime Engine
+
+<img src="prob.png">
+
+### Container related problem and their solution with container orchestration Kubernetes 
+
+<img src="listofcorch.png">
+
+### kubernetes Info 
+
+<img src="k8s.png">
+
+## k8s architecture diagram 
+
+<img src="carch1.png">
+
+## More close look 
+
+<img src="carch2.png">
+
+### k8s installation / setup 
+
+<img src="setupk8s.png">
+
+### Installing minikube 
+
+[link](https://minikube.sigs.k8s.io/docs/start/)
+
+### checking minikube 
+
+```
+minikube version 
+minikube version: v1.22.0
+commit: a03fbcf166e6f74ef224d4a63be4277d017bb62e
+
+```
+
+### minikube to use docker to setup cluster of single node
+
+```
+fire@ashutoshhs-MacBook-Air  ~  minikube  start  --driver=docker 
+😄  minikube v1.22.0 on Darwin 11.4
+🎉  minikube 1.23.2 is available! Download it: https://github.com/kubernetes/minikube/releases/tag/v1.23.2
+💡  To disable this notice, run: 'minikube config set WantUpdateNotification false'
+
+✨  Using the docker driver based on existing profile
+👍  Starting control plane node minikube in cluster minikube
+🚜  Pulling base image ...
+
+
+
+```
+
+###
+
+```
+ fire@ashutoshhs-MacBook-Air  ~  minikube  start  --driver=docker 
+😄  minikube v1.22.0 on Darwin 11.4
+🎉  minikube 1.23.2 is available! Download it: https://github.com/kubernetes/minikube/releases/tag/v1.23.2
+💡  To disable this notice, run: 'minikube config set WantUpdateNotification false'
+
+✨  Using the docker driver based on existing profile
+👍  Starting control plane node minikube in cluster minikube
+🚜  Pulling base image ...
+🤷  docker "minikube" container is missing, will recreate.
+🔥  Creating docker container (CPUs=2, Memory=1988MB) ...
+🐳  Preparing Kubernetes v1.21.2 on Docker 20.10.7 ...
+🔎  Verifying Kubernetes components...
+    ▪ Using image gcr.io/k8s-minikube/storage-provisioner:v5
+🌟  Enabled addons: storage-provisioner, default-storageclass
+🏄  Done! kubectl is now configured to use "minikube" cluster and "default" namespace by default
+ fire@ashutoshhs-MacBook-Air  ~  minikube  status
+minikube
+type: Control Plane
+host: Running
+kubelet: Running
+apiserver: Running
+kubeconfig: Configured
+
+```
+
+
+
 
 
