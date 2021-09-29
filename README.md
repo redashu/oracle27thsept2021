@@ -189,6 +189,92 @@ hello  oracle.txt  world
 
 ```
 
+### normal directory as volume 
+
+```
+ashu@ip-172-31-81-194 html-sample-app]$ cd  
+[ashu@ip-172-31-81-194 ~]$ pwd
+/home/ashu
+[ashu@ip-172-31-81-194 ~]$ mkdir hello
+[ashu@ip-172-31-81-194 ~]$ ls
+ashuimages  hello
+[ashu@ip-172-31-81-194 ~]$ cd  hello/
+[ashu@ip-172-31-81-194 hello]$ ls
+[ashu@ip-172-31-81-194 hello]$ echo hii >a.txt
+[ashu@ip-172-31-81-194 hello]$ ls
+a.txt
+[ashu@ip-172-31-81-194 hello]$ cd ..
+[ashu@ip-172-31-81-194 ~]$ pwd
+/home/ashu
+[ashu@ip-172-31-81-194 ~]$ ls
+ashuimages  hello
+[ashu@ip-172-31-81-194 ~]$ docker  run -it --rm  -v  /home/ashu/hello:/mnt/ok:ro  alpine  
+/ # 
+/ # 
+/ # cd /mnt/ok/
+/mnt/ok # ls
+a.txt
+/mnt/ok # exit
+
+```
+
+### db as a container 
+
+<img src="db.png">
+
+### removing container and volumes
+
+```
+324  docker  rm $(docker  ps -aq) -f
+  325  docker volume rm  $(docker  volume ls -q) 
+  
+```
+
+### DB as COntainer 
+
+```
+[ashu@ip-172-31-81-194 ~]$ docker run  -d  --name ashudb  -e  MYSQL_ROOT_PASSWORD=orDb088 -v  ashudbvol:/var/lib/mysql/     mysql 
+00e240eccec1967362595be26398e21bfda5ae6e74e706cc9cd3d7733c4bb747
+[ashu@ip-172-31-81-194 ~]$ docker  ps
+
+```
+
+### COnnecting to Db 
+
+```
+[ashu@ip-172-31-81-194 ~]$ docker  exec -it  ashudb bash 
+root@00e240eccec1:/# 
+root@00e240eccec1:/# 
+root@00e240eccec1:/# mysql  -u root -p
+Enter password: 
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 8
+Server version: 8.0.26 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2021, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
+| sys                |
++--------------------+
+4 rows in set (0.00 sec)
+
+mysql> create database  oracledb;
+Query OK, 1 row affected (0.00 sec)
+
+```
+
 
 
 
