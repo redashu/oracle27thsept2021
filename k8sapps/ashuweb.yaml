@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Pod
+metadata: # info about POD 
+  creationTimestamp: null
+  labels: # label of POD - key: value (bcz etcd)
+    x: helloashu1
+  name: ashuwebpod2 # name of pod 
+spec: # app info 
+  containers:
+  - image: dockerashu/oraclehttpd:29sep2021 # docker hub image 
+    name: ashuwebpod1 # name of container 
+    ports: # optional field 
+    - containerPort: 80 # container app port 
+    resources: {}
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+status: {}

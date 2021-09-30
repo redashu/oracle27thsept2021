@@ -1,0 +1,31 @@
+PING fb.com (157.240.229.35): 56 data bytes
+64 bytes from 157.240.229.35: seq=0 ttl=48 time=0.584 ms
+64 bytes from 157.240.229.35: seq=1 ttl=48 time=0.644 ms
+64 bytes from 157.240.229.35: seq=2 ttl=48 time=0.636 ms
+64 bytes from 157.240.229.35: seq=3 ttl=48 time=0.609 ms
+64 bytes from 157.240.229.35: seq=4 ttl=48 time=0.645 ms
+64 bytes from 157.240.229.35: seq=5 ttl=48 time=0.637 ms
+64 bytes from 157.240.229.35: seq=6 ttl=48 time=0.602 ms
+64 bytes from 157.240.229.35: seq=7 ttl=48 time=0.603 ms
+64 bytes from 157.240.229.35: seq=8 ttl=48 time=0.632 ms
+64 bytes from 157.240.229.35: seq=9 ttl=48 time=0.620 ms
+64 bytes from 157.240.229.35: seq=10 ttl=48 time=0.610 ms
+64 bytes from 157.240.229.35: seq=11 ttl=48 time=0.626 ms
+64 bytes from 157.240.229.35: seq=12 ttl=48 time=0.588 ms
+64 bytes from 157.240.229.35: seq=13 ttl=48 time=0.650 ms
+64 bytes from 157.240.229.35: seq=14 ttl=48 time=0.569 ms
+64 bytes from 157.240.229.35: seq=15 ttl=48 time=0.603 ms
+64 bytes from 157.240.229.35: seq=16 ttl=48 time=0.573 ms
+64 bytes from 157.240.229.35: seq=17 ttl=48 time=0.587 ms
+64 bytes from 157.240.229.35: seq=18 ttl=48 time=0.589 ms
+64 bytes from 157.240.229.35: seq=19 ttl=48 time=0.578 ms
+64 bytes from 157.240.229.35: seq=20 ttl=48 time=0.585 ms
+64 bytes from 157.240.229.35: seq=21 ttl=48 time=0.593 ms
+64 bytes from 157.240.229.35: seq=22 ttl=48 time=0.569 ms
+64 bytes from 157.240.229.35: seq=23 ttl=48 time=0.591 ms
+64 bytes from 157.240.229.35: seq=24 ttl=48 time=0.605 ms
+64 bytes from 157.240.229.35: seq=25 ttl=48 time=0.593 ms
+64 bytes from 157.240.229.35: seq=26 ttl=48 time=0.572 ms
+64 bytes from 157.240.229.35: seq=27 ttl=48 time=0.584 ms
+64 bytes from 157.240.229.35: seq=28 ttl=48 time=0.577 ms
+minion1
