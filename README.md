@@ -195,3 +195,68 @@ root
 
 ```
 
+### deleting pod 
+
+```
+fire@ashutoshhs-MacBook-Air  ~/Desktop/k8sapps  kubectl  delete  pods  ashupod-1  
+pod "ashupod-1" deleted
+
+====
+
+fire@ashutoshhs-MacBook-Air  ~/Desktop/k8sapps  kubectl  delete  pods --all       
+pod "anshulpod" deleted
+pod "arun-1" deleted
+pod "ashutosh-pod1" deleted
+pod "kapil-2" deleted
+pod "mallikpod-1" deleted
+
+```
+### auto generate yaml file 
+
+```
+kubectl  run  ashuwebpod1  --image=dockerashu/oraclehttpd:29sep2021  --port  80 --dry-run=client  -o  yaml                                   
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: ashuwebpod1
+  name: ashuwebpod1
+spec:
+  containers:
+  - image: dockerashu/oraclehttpd:29sep2021
+    name: ashuwebpod1
+    ports:
+    - containerPort: 80
+    resources: {}
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+status: {}
+
+```
+
+### store output of yaml in a file 
+
+```
+kubectl  run  ashuwebpod1  --image=dockerashu/oraclehttpd:29sep2021  --port  80 --dry-run=client  -o  yaml   >ashuweb.yaml
+
+```
+
+### accessing application using k8s client localhost 
+
+```
+fire@ashutoshhs-MacBook-Air  ~/Desktop/k8sapps  kubectl  port-forward     ashuwebpod2   1122:80
+Forwarding from 127.0.0.1:1122 -> 80
+Forwarding from [::1]:1122 -> 80
+Handling connection for 1122
+Handling connection for 1122
+Handling connection for 1122
+Handling connection for 1122
+Handling connection for 1122
+Handling connection for 1122
+^C%                              
+
+```
+
+
+
