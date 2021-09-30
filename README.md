@@ -257,6 +257,92 @@ Handling connection for 1122
 ^C%                              
 
 ```
+### Container networking 
+
+<img src="cnet.png">
+
+### COntainer Network internface by Calico 
+
+<img src="calico.png">
+
+### Intro to service 
+
+<img src="svc.png">
+
+### service type
+
+<img src="stype.png">
+
+### service can't user name or IP port of POds to connect 
+
+<img src="svc11.png">
+
+### service will use label to find pods
+
+<img src="lbpod.png">
+
+### checking label of pod
+
+```
+fire@ashutoshhs-MacBook-Air  ~/Desktop/k8sapps  kubectl  get  po  ashuwebpod2  --show-labels
+NAME          READY   STATUS    RESTARTS   AGE   LABELS
+ashuwebpod2   1/1     Running   0          22m   x=helloashu1
+
+```
+
+### nodeport service 
+
+<img src="np.png">
+
+###  creating nodeport 
+
+```
+fire@ashutoshhs-MacBook-Air  ~/Desktop/k8sapps  kubectl  create  service 
+Create a service using specified subcommand.
+
+Aliases:
+service, svc
+
+Available Commands:
+  clusterip    Create a ClusterIP service.
+  externalname Create an ExternalName service.
+  loadbalancer Create a LoadBalancer service.
+  nodeport     Create a NodePort service.
+
+Usage:
+  kubectl create service [flags] [options]
+
+Use "kubectl <command> --help" for more information about a given command.
+Use "kubectl options" for a list of global command-line options (applies to all commands).
+ ✘ fire@ashutoshhs-MacBook-Air  ~/Desktop/k8sapps  kubectl  create  service nodeport  ashusvc1  --tcp  1234:80   --dry-run=client -o yaml 
+
+
+
+```
+
+### matching service selector -- to label of pod
+
+<img src="selector.png">
+
+### deploy service 
+
+```
+fire@ashutoshhs-MacBook-Air  ~/Desktop/k8sapps  ls
+ashupod1.yaml ashusvc1.yaml ashuweb.yaml  logs.txt      task1.yaml
+ fire@ashutoshhs-MacBook-Air  ~/Desktop/k8sapps  kubectl apply -f  ashusvc1.yaml 
+service/ashusvc1 created
+ fire@ashutoshhs-MacBook-Air  ~/Desktop/k8sapps  
+ fire@ashutoshhs-MacBook-Air  ~/Desktop/k8sapps  
+ fire@ashutoshhs-MacBook-Air  ~/Desktop/k8sapps  kubectl  get  service 
+NAME              TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)          AGE
+ashusvc1          NodePort    10.111.181.4    <none>        1234:32596/TCP   8s
+ashutoshsvc1      NodePort    10.101.87.183   <none>        1555:32197/TCP   1s
+kubernetes        ClusterIP   10.96.0.1       <none>        443/TCP          23h
+vinuthaservice1   NodePort    10.104.116.62   <none>        1230:31715/TCP   15s
+ fire@ashutoshhs-MacBook-Air  ~/Desktop/k8sapps  
+
+
+```
 
 
 
