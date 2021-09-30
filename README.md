@@ -344,5 +344,66 @@ vinuthaservice1   NodePort    10.104.116.62   <none>        1230:31715/TCP   15s
 
 ```
 
+### delete all pods and service 
 
+```
+kubectl  delete  all  --all
+pod "anshulp1" deleted
+pod "arpod-http-1" deleted
+pod "arpod-http-2" deleted
+pod "ashutoshwebpod1" deleted
+pod "ashutoshwebpod2" deleted
+
+```
+
+### history 
+
+```
+ kubectl  run  ashuwebpod1  --image=dockerashu/oraclehttpd:29sep2021\n   --port  80 --dry-run=client  -o  yaml 
+ 4786  history
+ 4787  kubectl  run  ashuwebpod1  --image=dockerashu/oraclehttpd:29sep2021  --port  80 --dry-run=client  -o  yaml   >ashuweb.yaml 
+ 4788  history
+ 4789  kubectl  apply -f  ashuweb.yaml
+ 4790  kubectl  get  po
+ 4791  kubectl  apply -f  ashuweb.yaml
+ 4792  kubectl  get  po
+ 4793  kubectl  get  po -o wide
+ 4794  history
+ 4795  kubectl get  po 
+ 4796  kubectl describe pod anshulp1
+ 4797  kubectl  get  po 
+ 4798  history
+ 4799  kubectl  get  po 
+ 4800  kubectl  port-forward   1122:80   ashuwebpod2 
+ 4801  kubectl  port-forward     ashuwebpod2   1122:80 
+ 4802  kubectl  get  po 
+ 4803  kubectl  delete  pods --all
+ 4804  ls
+ 4805  kubectl apply -f  ashuweb.yaml
+ 4806  kubectl get  po 
+ 4807  history
+ 4808  kubectl apply -f  ashuweb.yaml
+ 4809  kubectl  get  po 
+ 4810  kubectl  get  po  ashuwebpod2 
+ 4811  kubectl  get  po  ashuwebpod2  --show-labels
+ 4812  kubectl  create  service 
+ 4813  kubectl  create  service nodeport  ashusvc1  --tcp  1234:80   --dry-run=client -o yaml 
+ 4814  kubectl  create  service nodeport  ashusvc1  --tcp  1234:80   --dry-run=client -o yaml  >ashusvc1.yaml
+ 4815  ls
+ 4816  kubectl apply -f  ashusvc1.yaml
+ 4817  kubectl  get  service 
+ 4818  history
+ 4819  kubectl  get  service 
+ 4820  kubectl  get  po 
+ 4821  kubectl  version 
+ 4822  history
+ 4823  kubectl  get  svc
+ 4824  kubectl  get  po 
+ 4825  kubectl  delete  all  --all
+ 4826  ls
+ 4827  kubectl  apply -f  ashufinalapp.yaml
+ 
+ ```
+ 
+ 
 
