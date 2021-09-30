@@ -44,4 +44,13 @@ minion2      Ready    <none>                 17h   v1.22.2
 
 <img src="sch.png">
 
+### the brain of k8s master is ETCD (Nosql db) key: value type
+
+<img src="etcd.png">
+
+## Intro to POD
+
+<img src="pod.png">
+
+
 
