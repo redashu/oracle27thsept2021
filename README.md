@@ -428,6 +428,127 @@ deployment.apps/webapp rolled back
 
 ```
 
-
+### switching clusters 
 
 ```
+fire@ashutoshhs-MacBook-Air  ~  kubectl  config get-contexts 
+CURRENT   NAME                          CLUSTER      AUTHINFO           NAMESPACE
+          kubernetes-admin@kubernetes   kubernetes   kubernetes-admin   ashu-space
+*         minikube                      minikube     minikube           default
+ fire@ashutoshhs-MacBook-Air  ~  kubectl  config   use-context   kubernetes-admin@kubernetes 
+Switched to context "kubernetes-admin@kubernetes".
+ fire@ashutoshhs-MacBook-Air  ~  
+ fire@ashutoshhs-MacBook-Air  ~  kubectl  get  nodes
+NAME         STATUS   ROLES                  AGE   VERSION
+masternode   Ready    control-plane,master   47h   v1.22.2
+minion1      Ready    <none>                 47h   v1.22.2
+minion2      Ready    <none>                 47h   v1.22.2
+ fire@ashutoshhs-MacBook-Air  ~  kubectl  config   use-context  minikube                     
+Switched to context "minikube".
+ fire@ashutoshhs-MacBook-Air  ~  kubectl  get  nodes                    
+NAME       STATUS   ROLES                  AGE   VERSION
+minikube   Ready    control-plane,master   16d   v1.21.2
+
+```
+
+## k8s revision 
+
+<img src="revv.png">
+
+## HPA 
+
+<img src="hpa.png">
+
+### deploy metrics server in k8s
+
+```
+kubectl  apply -f https://raw.githubusercontent.com/redashu/k8s/hpa/hpa/components.yaml
+serviceaccount/metrics-server created
+clusterrole.rbac.authorization.k8s.io/system:aggregated-metrics-reader created
+clusterrole.rbac.authorization.k8s.io/system:metrics-server created
+rolebinding.rbac.authorization.k8s.io/metrics-server-auth-reader created
+clusterrolebinding.rbac.authorization.k8s.io/metrics-server:system:auth-delegator created
+clusterrolebinding.rbac.authorization.k8s.io/system:metrics-server created
+service/metrics-server created
+deployment.apps/metrics-server created
+apiservice.apiregistration.k8s.io/v1beta1.metrics.k8s.io created
+
+```
+
+### auto scaling rule 
+
+```
+fire@ashutoshhs-MacBook-Air  ~/Desktop/k8sapps  kubectl  autoscale deploy  webapp --min=1  --max=50  --cpu-percent=80
+horizontalpodautoscaler.autoscaling/webapp autoscaled
+ fire@ashutoshhs-MacBook-Air  ~/Desktop/k8sapps  
+ fire@ashutoshhs-MacBook-Air  ~/Desktop/k8sapps  
+ fire@ashutoshhs-MacBook-Air  ~/Desktop/k8sapps  
+ fire@ashutoshhs-MacBook-Air  ~/Desktop/k8sapps  kubectl  get  hpa
+NAME     REFERENCE           TARGETS         MINPODS   MAXPODS   REPLICAS   AGE
+webapp   Deployment/webapp   <unknown>/80%   1         50        0          6s
+
+```
+
+### k8s dashboard 
+
+[URL](https://kubernetes.io/docs/tasks/access-application-cluster/web-ui-dashboard/)
+
+###
+
+```
+ fire@ashutoshhs-MacBook-Air  ~  kubectl  get deploy -n kubernetes-dashboard
+NAME                        READY   UP-TO-DATE   AVAILABLE   AGE
+dashboard-metrics-scraper   1/1     1            1           41s
+kubernetes-dashboard        1/1     1            1           43s
+ fire@ashutoshhs-MacBook-Air  ~  kubectl  get po  -n kubernetes-dashboard
+NAME                                         READY   STATUS    RESTARTS   AGE
+dashboard-metrics-scraper-856586f554-6whqc   1/1     Running   0          60s
+kubernetes-dashboard-67484c44f6-kwfqz        1/1     Running   0          62s
+ fire@ashutoshhs-MacBook-Air  ~  kubectl  get svc -n kubernetes-dashboard
+NAME                        TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)    AGE
+dashboard-metrics-scraper   ClusterIP   10.99.183.129    <none>        8000/TCP   69s
+kubernetes-dashboard        ClusterIP   10.110.177.206   <none>        443/TCP    76s
+ fire@ashutoshhs-MacBook-Air  ~  kubectl  edit  svc kubernetes-dashboard   -n kubernetes-dashboard
+service/kubernetes-dashboard edited
+ fire@ashutoshhs-MacBook-Air  ~  kubectl  get svc -n kubernetes-dashboard                         
+NAME                        TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)         AGE
+dashboard-metrics-scraper   ClusterIP   10.99.183.129    <none>        8000/TCP        107s
+kubernetes-dashboard        NodePort    10.110.177.206   <none>        443:32373/TCP   114s
+
+```
+
+### dashboard token 
+
+```
+kubectl  get secret -n kubernetes-dashboard
+NAME                               TYPE                                  DATA   AGE
+default-token-8hbjc                kubernetes.io/service-account-token   3      4m15s
+kubernetes-dashboard-certs         Opaque                                0      4m12s
+kubernetes-dashboard-csrf          Opaque                                1      4m12s
+kubernetes-dashboard-key-holder    Opaque                                2      4m11s
+kubernetes-dashboard-token-wb6xs   kubernetes.io/service-account-token   3      4m14s
+ fire@ashutoshhs-MacBook-Air  ~  kubectl  describe  secret kubernetes-dashboard-token-wb6xs   -n kubernetes-dashboard
+Name:         kubernetes-dashboard-token-wb6xs
+Namespace:    kubernetes-dashboard
+Labels:       <none>
+Annotations:  kubernetes.io/service-account.name: kubernetes-dashboard
+              kubernetes.io/service-account.uid: 5c95938f-650e-40cf-90e4-b68de795e277
+
+Type:  kubernetes.io/service-account-token
+
+Data
+====
+ca.crt:     1099 bytes
+namespace:  20 bytes
+token:      eyJhbGciOiJSUzI1NiIsImtpZCI6ImFmMVRLc1o0NFByb1JXVFc0UGJHMG1OSkt1WGlQaU96MkpFZWRselB5WGsifQ.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJrdWJlcm5ldGVzLWRhc2hib2FyZCIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VjcmV0Lm5hbWUiOiJrdWJlcm5ldGVzLWRhc2hib2FyZC10b2tlbi13YjZ4cyIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VydmljZS1hY2NvdW50Lm5hbWUiOiJrdWJlcm5ldGVzLWRhc2hib2FyZCIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VydmljZS1hY2NvdW50LnVpZCI6IjVjOTU5MzhmLTY1MGUtNDBjZi05MGU0LWI2OGRlNzk1ZTI3NyIsInN1Y
+
+```
+
+### setting permission 
+
+```
+kubectl create clusterrolebinding dashboard-admin-sa1   --clusterrole=cluster-admin   --serviceaccount=kubernetes-dashboard:kubernetes-dashboard
+
+```
+
+
