@@ -258,4 +258,113 @@ default-token-lkmrz   kubernetes.io/service-account-token   3      73m
 
 ```
 
+### 
+
+### task done 
+
+```
+4906  kubectl  create namespace ashuk8s1 --dry-run=client -o yaml 
+ 4907  kubectl  run  ashupod2 --image=ubuntu  --dry-run=client -o yaml 
+ 4908  docker pull ubuntu
+ 4909  docker run -it --rm  ubuntu sh 
+ 4910  kubectl  create service nodeport  ashutoshhsvc1 --tcp 1234:80  --dry-run=client -o yaml 
+ 4911  kubectl apply -f mytask.yaml
+ 4912  kubectl  get  ns
+ 4913  kubectl  get  all -n ashuk8s1 
+ 4914  ls
+ 4915  kubectl  cp logs.txt  ashupod2:/tmp/ -n ashuk8s1 
+ 4916  kubectl exec -it  ashupod2 -n ashuk8s1 -- bash 
+ 
+ ```
+ 
+ 
+ ### Introduction to new apiresource called  Deployment 
+ 
+ <img src="dep.png">
+ 
+ ### cleaning up 
+ 
+ ```
+ fire@ashutoshhs-MacBook-Air  ~/Desktop/k8sapps  kubectl delete all --all  -n ashuk8s1
+pod "ashupod2" deleted
+service "ashutoshhsvc1" deleted
+ fire@ashutoshhs-MacBook-Air  ~/Desktop/k8sapps  kubectl delete ns  ashuk8s1 
+namespace "ashuk8s1" deleted
+                                                                                                 
+
+```
+
+### creating deployment 
+
+```
+kubectl  create  deployment  ashudep1 --image=dockerashu/oraclehttpd:29sep2021  --dry-run=client -o yaml  >ashudeploy.yaml
+
+```
+
+### template will be used by deployment to create pods
+
+<img src="depp.png">
+
+### 
+
+```
+fire@ashutoshhs-MacBook-Air  ~/Desktop/k8sapps  kubectl apply -f  ashudeploy.yaml 
+deployment.apps/ashudep1 created
+ fire@ashutoshhs-MacBook-Air  ~/Desktop/k8sapps  kubectl get deployments
+NAME       READY   UP-TO-DATE   AVAILABLE   AGE
+ashudep1   1/1     1            1           8s
+ fire@ashutoshhs-MacBook-Air  ~/Desktop/k8sapps  kubectl get deployment 
+NAME       READY   UP-TO-DATE   AVAILABLE   AGE
+ashudep1   1/1     1            1           10s
+ fire@ashutoshhs-MacBook-Air  ~/Desktop/k8sapps  kubectl get deploy    
+NAME       READY   UP-TO-DATE   AVAILABLE   AGE
+ashudep1   1/1     1            1           13s
+ fire@ashutoshhs-MacBook-Air  ~/Desktop/k8sapps  kubectl  get  po 
+NAME                        READY   STATUS    RESTARTS   AGE
+ashudep1-5cc48f58d5-87j8m   1/1     Running   0          26s
+
+```
+
+### recreation check 
+
+```
+fire@ashutoshhs-MacBook-Air  ~/Desktop/k8sapps  kubectl delete po ashudep1-5cc48f58d5-87j8m
+pod "ashudep1-5cc48f58d5-87j8m" deleted
+ fire@ashutoshhs-MacBook-Air  ~/Desktop/k8sapps  kubectl  get po                            
+NAME                        READY   STATUS    RESTARTS   AGE
+ashudep1-5cc48f58d5-nhnxh   1/1     Running   0          4s
+
+```
+
+### to automatch selector or service to label of pod by deployment 
+### create service in given way 
+
+```
+ fire@ashutoshhs-MacBook-Air  ~/Desktop/k8sapps  kubectl  get deploy
+NAME       READY   UP-TO-DATE   AVAILABLE   AGE
+ashudep1   1/1     1            1           2m51s
+ fire@ashutoshhs-MacBook-Air  ~/Desktop/k8sapps  kubectl expose deployment  ashudep1  --type NodePort  --port 80  --name ashusvc11122
+service/ashusvc11122 exposed
+ fire@ashutoshhs-MacBook-Air  ~/Desktop/k8sapps  kubectl  get  svc
+NAME           TYPE       CLUSTER-IP       EXTERNAL-IP   PORT(S)        AGE
+ashusvc11122   NodePort   10.102.169.138   <none>        80:31403/TCP   14s
+
+```
+
+### reality of deployment 
+
+```
+fire@ashutoshhs-MacBook-Air  ~/Desktop/k8sapps  kubectl  get  deploy
+NAME       READY   UP-TO-DATE   AVAILABLE   AGE
+ashudep1   2/2     2            2           7m57s
+ fire@ashutoshhs-MacBook-Air  ~/Desktop/k8sapps  kubectl  get  rs    
+NAME                  DESIRED   CURRENT   READY   AGE
+ashudep1-5cc48f58d5   2         2         2       8m3s
+ fire@ashutoshhs-MacBook-Air  ~/Desktop/k8sapps  kubectl  get  po
+NAME                        READY   STATUS    RESTARTS   AGE
+ashudep1-5cc48f58d5-f2th9   1/1     Running   0          77s
+ashudep1-5cc48f58d5-nhnxh   1/1     Running   0          6m2s
+
+```
+
 
