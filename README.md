@@ -367,4 +367,67 @@ ashudep1-5cc48f58d5-nhnxh   1/1     Running   0          6m2s
 
 ```
 
+### webapp to test deployment features in k8s
 
+### creating webapp and svc
+
+```
+kubectl  create  deployment webapp --image=dockerashu/nginx:v009  --dry-run=client -o yaml   >webappp.yaml
+
+kubectl  create  service nodeport  websvc --tcp 1235:80 --dry-run=client -o yaml
+
+```
+
+###
+
+```
+ fire@ashutoshhs-MacBook-Air  ~/Desktop/k8sapps  kubectl  apply -f webappp.yaml 
+deployment.apps/webapp created
+service/websvc created
+ fire@ashutoshhs-MacBook-Air  ~/Desktop/k8sapps  kubectl  get deploy
+NAME     READY   UP-TO-DATE   AVAILABLE   AGE
+webapp   1/1     1            1           6s
+ fire@ashutoshhs-MacBook-Air  ~/Desktop/k8sapps  kubectl  get svc   
+NAME     TYPE       CLUSTER-IP      EXTERNAL-IP   PORT(S)          AGE
+websvc   NodePort   10.111.252.63   <none>        1235:31053/TCP   9s
+
+```
+
+### External Loadbalancer
+
+<img src="lb.png">
+
+### pod scaling understanding 
+
+<img src="scaling.png">
+
+### manual horizontal scaling 
+
+```
+kubectl  scale deployment  webapp --replicas=3
+
+```
+
+### rolling updates 
+
+<img src="rolling.png">
+
+### updating image to upgrade application 
+
+```
+kubectl  set  image  deployment webapp  nginx=dockerashu/nginx:v0010
+deployment.apps/webapp image updated
+
+```
+
+### rollback to previous version 
+
+```
+fire@ashutoshhs-MacBook-Air  ~/Desktop/k8sapps  kubectl  rollout  undo deployment  webapp  
+deployment.apps/webapp rolled back
+
+```
+
+
+
+```
