@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: webapp
+  name: webapp # name of deployment 
+spec:
+  replicas: 1 # no of pod 
+  selector:
+    matchLabels:
+      app: webapp
+  strategy: {}
+  template: # template section to create pods 
+    metadata:
+      creationTimestamp: null
+      labels: # label of pod 
+        app: webapp
+    spec:
+      containers:
+      - image: dockerashu/nginx:v009
+        name: nginx
+        resources: {}
+status: {}
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: websvc
+  name: websvc
+spec:
+  ports:
+  - name: 1235-80
+    port: 1235
+    protocol: TCP
+    targetPort: 80
+  selector: # pod finder 
+    app: webapp # label of pod from template section
+  type: NodePort
+status:
+  loadBalancer: {}
+

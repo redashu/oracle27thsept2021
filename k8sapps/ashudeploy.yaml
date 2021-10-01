@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: ashudep1
+  name: ashudep1 # name of deployment 
+spec:
+  replicas: 2 # number of pod we want during deployment 
+  selector:
+    matchLabels:
+      app: ashudep1
+  strategy: {}
+  template:  # deploy will use template to create pod 
+    metadata:
+      creationTimestamp: null
+      labels: # label of pod 
+        app: ashudep1
+    spec:
+      containers:
+      - image: dockerashu/oraclehttpd:29sep2021
+        name: oraclehttpd
+        resources: {}
+status: {}
